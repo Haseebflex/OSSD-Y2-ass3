@@ -1,3 +1,4 @@
+import csv
 import requests
 from bs4 import BeautifulSoup
 
@@ -33,10 +34,29 @@ def get_cars_data(car):
 
 
 #create a function to scrape data from the webpage, the above code can be used inside the function
-def scrapper():
-    pass
+def scrapper(car):
+    data = get_cars_data(car)
+    return data
 
 
 # create a function to save data to a csv file
 def save_to_file(data, filename):
-    pass
+    if not data:
+        print("No data to save!")
+        return
+
+    with open(filename, "w", newline="", encoding="utf-8") as file:
+        writer = csv.writer(file)
+
+        # headers
+        writer.writerow(["Name", "Price"])
+
+        # data rows
+        for item in data:
+            writer.writerow([item['name'], item['price']])
+
+    print("Data saved successfully in", filename)
+
+data = scrapper("toyota")
+save_to_file(data, "cars.csv")
+print("Done")
